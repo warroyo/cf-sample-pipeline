@@ -1,0 +1,45 @@
+---
+jobs:
+- name: deploy-((app_name))-dev
+  public: true
+  serial: true
+  plan:
+  - get: application
+    trigger: true
+  - put: cf-dev
+    params:
+      manifest: application/manifest.yml
+      path: application/
+      current_app_name: ((app_name))
+
+- name: dev-smoke-tests
+  plan:
+    - get: tools
+      passed: 
+        - deploy-((app_name))-dev
+      trigger: true
+    - task: 
+      file: tools/tasks/smoke/task.yml
+      params:
+        app_url: ((dev_route))
+resources:
+- name: application
+  type: git
+  source:
+    uri: ((git_repo))
+
+- name: tools
+  type: git
+  source:
+    uri: https://github.com/warroyo/cf-sample-pipeline
+    branch: master
+
+- name: cf-dev
+  type: cf
+  source:
+    api: https://api.sys.pas.east.aws.warroyo.com
+    username: admin
+    password: ((pas_aws_warroyo))
+    organization: docu
+    space: dev
+    skip_cert_check: true
