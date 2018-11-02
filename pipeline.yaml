@@ -35,7 +35,6 @@ jobs:
       command: zero-downtime-push
       manifest: application/manifest.test.yml
       org: docu
-      instances: 4
       space: test
       path: application/
       current_app_name: ((app_name))
