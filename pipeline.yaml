@@ -59,6 +59,8 @@ jobs:
       resource: cf-foundation
       params:
         command: scale
+        org: docu
+        space: test
         app_name: ((app_name))
         instances: 5
 
