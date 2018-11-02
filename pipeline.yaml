@@ -50,6 +50,18 @@ jobs:
       params:
         app_url: ((test_route))
 
+- name: test-scale
+  plan:
+    - get: cf-foundation
+      trigger: true
+      passed: [test-smoke-tests]
+    - put: cf-scale
+      resource: cf-foundation
+      params:
+        command: scale
+        app_name: ((app_name))
+        instances: 5
+
 resources:
 - name: application
   type: git
