@@ -1,8 +1,6 @@
 ---
 jobs:
 - name: deploy-((app_name))-dev
-  public: true
-  serial: true
   plan:
   - get: application
     trigger: true
@@ -22,6 +20,29 @@ jobs:
       file: tools/tasks/smoke/task.yml
       params:
         app_url: ((dev_route))
+
+# - name: deploy-((app_name))-test
+#   plan:
+#   - get: application
+#     passed: [dev-smoke-tests]
+#   - put: cf-test
+#     params:
+#       manifest: application/manifest.yml
+#       path: application/
+#       current_app_name: ((app_name))
+#       vars: 
+#         space: dev
+
+# - name: test-smoke-tests
+#   plan:
+#     - get: tools
+#     - get: cf-test
+#       trigger: true
+#       passed: [deploy-((app_name))-test]
+#     - task: run-smoke-tests
+#       file: tools/tasks/smoke/task.yml
+#       params:
+#         app_url: ((test_route))
 
 resources:
 - name: application
@@ -44,3 +65,13 @@ resources:
     organization: docu
     space: dev
     skip_cert_check: true
+
+# - name: cf-test
+#   type: cf
+#   source:
+#     api: https://api.sys.pas.east.aws.warroyo.com
+#     username: admin
+#     password: ((pas_aws_warroyo))
+#     organization: docu
+#     space: test
+#     skip_cert_check: true
