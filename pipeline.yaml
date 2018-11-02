@@ -22,6 +22,7 @@ jobs:
       file: tools/tasks/smoke/task.yml
       params:
         app_url: ((dev_route))
+        
 resources:
 - name: application
   type: git
