@@ -15,14 +15,14 @@ jobs:
 - name: dev-smoke-tests
   plan:
     - get: tools
-      passed: 
-        - deploy-((app_name))-dev
+    - get: cf-dev
       trigger: true
-    - task: 
+      passed: [deploy-((app_name))-dev]
+    - task: run-smoke-tests
       file: tools/tasks/smoke/task.yml
       params:
         app_url: ((dev_route))
-        
+
 resources:
 - name: application
   type: git
